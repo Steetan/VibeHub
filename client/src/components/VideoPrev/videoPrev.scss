@@ -1,0 +1,12 @@
+.video-prev {
+	display: block;
+	max-width: 350px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	img {
+		width: 100%;
+		height: auto;
+		border-radius: 10px;
+	}
+}
