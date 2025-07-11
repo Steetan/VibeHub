@@ -4,10 +4,6 @@ export const getPreviews = (req, res) => {
         pool.query('SELECT * FROM videos', (error, results) => {
             if (error)
                 throw error;
-            // pool.query('SELECT * FROM videos', (error: Error, resultsPreviews: QueryResult) => {
-            // 	if (error) throw error
-            // 	res.status(200).json(results.rows)
-            // })
             res.status(200).json(results.rows);
         });
     }

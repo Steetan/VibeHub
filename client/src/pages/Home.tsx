@@ -5,6 +5,7 @@ import VideoPrev from '../components/VideoPrev/VideoPrev'
 export interface IVideo {
 	id: string
 	link: string
+	category: string
 	title: string
 	preview: string
 }
@@ -22,8 +23,6 @@ const Home: React.FC = () => {
 		}
 	}, [data])
 
-	console.log(fetchData)
-
 	if (isLoading) {
 		return <div>Loading...</div>
 	}
@@ -33,7 +32,7 @@ const Home: React.FC = () => {
 	}
 
 	return (
-		<div>
+		<div className='content__video-prev'>
 			{fetchData.map((item: IVideo) => (
 				<VideoPrev key={item.id} {...item} />
 			))}
