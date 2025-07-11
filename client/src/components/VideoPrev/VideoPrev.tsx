@@ -1,20 +1,22 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-const VideoPrev = ({}) => {
+const VideoPrev: React.FC<{ id: string; preview: string; title: string }> = ({
+	id,
+	preview,
+	title,
+}) => {
 	const navigate = useNavigate()
 
-	const redirectPage = () => {
-		navigate('/video')
+	const redirectPage = async () => {
+		navigate(`/video?look=${id}`)
 	}
 
 	return (
-		// <Link to='/video'>
 		<div className='video-prev' onClick={() => redirectPage()}>
-			<img src={require('../../assets/prev.jpg')} alt='' />
-			<div className='video-prev__title'>Название видео</div>
+			<img src={`${process.env.REACT_APP_SERVER_URL}/uploads/previews/${preview}`} />
+			<div className='video-prev__title'>{title}</div>
 		</div>
-		// </Link>
 	)
 }
 
