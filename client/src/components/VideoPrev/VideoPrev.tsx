@@ -21,7 +21,9 @@ const VideoPrev: React.FC<IVideo> = ({ id, preview, title, category, link }) => 
 
 	return (
 		<div
-			className={`video-prev ${location.pathname === '/video' ? 'video-prev--fullvideo' : ''}`}
+			className={`video-prev ${
+				location.pathname === '/video' || location.pathname === '/quest' ? 'video-prev--desc' : ''
+			}`}
 			onClick={redirectPage}
 		>
 			<div className='video-prev__img'>

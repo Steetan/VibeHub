@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getPreviews, getVideoById } from './controllers/VideoController.js';
+import { getPreviews, getVideoById, getVideoBySearch } from './controllers/VideoController.js';
 import multer from 'multer';
 const router = Router();
 const storageVideos = multer.diskStorage({
@@ -21,6 +21,7 @@ const storagePreviews = multer.diskStorage({
 const upload = multer({ storage: storageVideos });
 router.get('/', getPreviews);
 router.get('/video', getVideoById);
+router.get('/quest', getVideoBySearch);
 router.post('/dep', upload.single('video'), (req, res) => {
     var _a;
     res.status(201).json({

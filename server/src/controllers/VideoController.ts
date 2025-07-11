@@ -20,8 +20,22 @@ export const getVideoById = (req: Request, res: Response) => {
 			[req.query.look],
 			(error: Error, results: QueryResult) => {
 				if (error) throw error
-				console.log(results.rows)
 				res.status(200).json(results.rows[0])
+			},
+		)
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+export const getVideoBySearch = (req: Request, res: Response) => {
+	try {
+		pool.query(
+			"SELECT * FROM videos WHERE title LIKE '%' || $1 || '%'",
+			[req.query.search],
+			(error: Error, results: QueryResult) => {
+				if (error) throw error
+				res.status(200).json(results.rows)
 			},
 		)
 	} catch (error) {

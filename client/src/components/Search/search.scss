@@ -1,4 +1,6 @@
 .search {
+	display: flex;
+	align-items: center;
 	&__input {
 		border-radius: 10px;
 		padding: 10px;

@@ -6,14 +6,16 @@
 	cursor: pointer;
 	gap: 10px;
 	img {
-		width: 100%;
+		width: 350px;
 		height: auto;
 		border-radius: 10px;
 	}
-	&--fullvideo {
-		max-width: 350px;
+	&__title {
+		word-break: break-all;
+	}
+	&--desc {
+		max-width: 1000px;
 		flex-direction: row;
 		width: 100%;
-		justify-content: space-between;
 	}
 }

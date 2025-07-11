@@ -81,6 +81,11 @@ body {
 	.video-block {
 		width: 100%;
 	}
+
+	&--quest {
+		display: flex;
+		justify-content: center;
+	}
 }
 
 .form-block {
