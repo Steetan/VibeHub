@@ -6,6 +6,7 @@
 @import '../components/VideoBlock/videoBlock.scss';
 @import '../components/RecommendsBlock/recomendsBlock.scss';
 @import '../pages/FullVideo/fullVideo.scss';
+@import '../components/Aside/aside.scss';
 @import './button.scss';
 
 html,
@@ -52,13 +53,13 @@ body {
 }
 
 .wrapper {
+	padding: 50px 0 0 200px;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	flex: 1 1 auto;
 	min-height: 100vh;
 	border-radius: 10px;
-
+	flex-direction: column;
 	@media (max-width: 570px) {
 		width: 100%;
 		margin: 0;

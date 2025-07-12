@@ -1,6 +1,7 @@
 @import '../../scss/variables.scss';
 
 .header {
+	z-index: 22;
 	position: fixed;
 	width: 100%;
 	background-color: $purple;

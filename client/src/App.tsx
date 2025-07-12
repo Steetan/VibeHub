@@ -8,6 +8,7 @@ import Registration from './pages/Registration'
 import NotFound from './pages/NotFound/NotFound'
 import FullVideo from './pages/FullVideo/FullVideo'
 import Quest from './pages/Quest/Quest'
+import AddVideo from './pages/AddVideo/AddVideo'
 
 const App = () => {
 	return (
@@ -16,6 +17,7 @@ const App = () => {
 				<Route path='' element={<Home />} />
 				<Route path='quest' element={<Quest />} />
 				<Route path='video' element={<FullVideo />} />
+				<Route path='addvideo' element={<AddVideo />} />
 				<Route path='auth/login' element={<Login />} />
 				<Route path='auth/reg' element={<Registration />} />
 				<Route path='*' element={<NotFound />} />

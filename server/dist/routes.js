@@ -1,6 +1,8 @@
 import { Router } from 'express';
-import { getPreviews, getVideoById, getVideoBySearch } from './controllers/VideoController.js';
+import { addVideo, getPreviews, getVideoById, getVideoBySearch, } from './controllers/VideoController.js';
 import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 const router = Router();
 const storageVideos = multer.diskStorage({
     destination: (_, __, cb) => {
@@ -19,13 +21,25 @@ const storagePreviews = multer.diskStorage({
     },
 });
 const upload = multer({ storage: storageVideos });
+const uploadImage = multer({ storage: storagePreviews });
+router.post('/addvideo', upload.single('video'), addVideo);
 router.get('/', getPreviews);
 router.get('/video', getVideoById);
 router.get('/quest', getVideoBySearch);
-router.post('/dep', upload.single('video'), (req, res) => {
+router.post('/prev', uploadImage.single('image'), (req, res) => {
     var _a;
     res.status(201).json({
-        url: (_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname,
+        url: `${(_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname}`,
+    });
+});
+router.delete('/prev/:filename', (req, res) => {
+    const fileName = req.params.filename;
+    const filePath = path.join('uploads/previews', fileName);
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Ошибка при удалении файла' });
+        }
+        res.json({ message: 'Файл успешно удален' });
     });
 });
 export default router;

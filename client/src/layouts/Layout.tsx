@@ -2,6 +2,7 @@ import React from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 // import Aside from '../components/Aside/Aside'
 import Header from '../components/Header/Header'
+import Aside from '../components/Aside/Aside'
 
 const Layout = () => {
 	const location = useLocation()
@@ -9,9 +10,9 @@ const Layout = () => {
 	console.log(location.pathname)
 	return (
 		<div className='main'>
-			{/* <Aside /> */}
+			<Header />
 			<div className='wrapper'>
-				<Header />
+				<Aside />
 				<div className={location.pathname === '/quest' ? 'content content--quest' : 'content'}>
 					<Outlet />
 				</div>
