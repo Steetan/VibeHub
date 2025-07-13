@@ -1,4 +1,6 @@
+import jwt from 'jsonwebtoken';
 import { pool } from '../db.js';
+import { v4 as uuidv4 } from 'uuid';
 export const getPreviews = (req, res) => {
     try {
         pool.query('SELECT * FROM videos', (error, results) => {
@@ -23,6 +25,26 @@ export const getVideoById = (req, res) => {
         console.log(error);
     }
 };
+export const getVideoByUserId = (req, res) => {
+    try {
+        const token = String(req.query.token) || '';
+        jwt.verify(token, `${process.env.JWT_SECRET}`, (err, decoded) => {
+            if (err) {
+                res.json({ error: 'Неверный токен' });
+            }
+            else {
+                pool.query('SELECT * FROM videos WHERE user_id = $1', [decoded.id], (error, results) => {
+                    if (error)
+                        throw error;
+                    res.status(200).json(results.rows);
+                });
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+};
 export const getVideoBySearch = (req, res) => {
     try {
         pool.query("SELECT * FROM videos WHERE title LIKE '%' || $1 || '%'", [req.query.search], (error, results) => {
@@ -36,19 +58,30 @@ export const getVideoBySearch = (req, res) => {
     }
 };
 export const addVideo = (req, res) => {
-    var _a;
-    console.log(req.body);
     try {
-        pool.query("INSERT INTO videos (id, link, title, preview, category, description) VALUES ('111', $1, $2,$3, $4, $5)", [
-            (_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname,
-            req.body.title,
-            req.body.imageUrl,
-            req.body.category,
-            req.body.description,
-        ], (error, results) => {
-            if (error)
-                throw error;
-            res.status(201);
+        const token = String(req.query.token) || '';
+        jwt.verify(token, `${process.env.JWT_SECRET}`, (err, decoded) => {
+            var _a;
+            if (err) {
+                res.json({ error: 'Неверный токен' });
+            }
+            else {
+                pool.query('INSERT INTO videos (id, link, title, preview, category, description, user_id) VALUES ($1, $2,$3, $4, $5, $6, $7)', [
+                    uuidv4(),
+                    (_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname,
+                    req.body.title,
+                    req.body.imageUrl,
+                    req.body.category,
+                    req.body.description,
+                    decoded.id,
+                ], (error, results) => {
+                    if (error)
+                        throw error;
+                    res.status(201).json({
+                        message: 'ok',
+                    });
+                });
+            }
         });
     }
     catch (error) {
