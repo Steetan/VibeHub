@@ -3,6 +3,9 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { TextField } from '@mui/material'
 import { customAxios } from '../../utils/axios'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
+import Cookies from 'js-cookie'
 
 export interface FormData {
 	title: string
@@ -11,6 +14,7 @@ export interface FormData {
 }
 
 const AddVideo: React.FC = () => {
+	const { isAuth } = useSelector((state: RootState) => state.authSlice)
 	const [videoUrl, setVideoUrl] = React.useState<string | null>(null)
 	const [videoFile, setVideoFile] = React.useState<File | null>(null)
 	const [imgUrl, setImgUrl] = React.useState<any>(null)
@@ -33,7 +37,7 @@ const AddVideo: React.FC = () => {
 			formData.append('imageUrl', imgUrl)
 
 			try {
-				await customAxios('/addvideo', 'post', formData).then(() => {
+				await customAxios(`/addvideo?token=${Cookies.get('token')}`, 'post', formData).then(() => {
 					navigate('/')
 				})
 			} catch (error) {
@@ -73,6 +77,8 @@ const AddVideo: React.FC = () => {
 			console.log(error)
 		}
 	}
+
+	!isAuth && navigate('/')
 
 	return (
 		<div className='form-block-wrapper'>

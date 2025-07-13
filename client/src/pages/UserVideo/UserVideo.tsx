@@ -3,15 +3,15 @@ import { IVideo } from '../Home'
 import VideoPrev from '../../components/VideoPrev/VideoPrev'
 import { customAxios } from '../../utils/axios'
 import { useSearchParams } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
-const Quest: React.FC = ({}) => {
+const UserVideo: React.FC = ({}) => {
 	const [fetchDataSearch, setFetchDataSearch] = React.useState([])
-	const [searchParams, setSearchParams] = useSearchParams()
-	const searchTerm = searchParams.get('search')
 	React.useEffect(() => {
 		const fetchData = async () => {
-			await customAxios(`/quest?search=${searchTerm}`, 'get').then((fetData) => {
+			await customAxios(`/video/user?token=${Cookies.get('token')}`, 'get').then((fetData) => {
 				setFetchDataSearch(fetData)
+				console.log(fetData)
 			})
 		}
 		fetchData()
@@ -19,13 +19,14 @@ const Quest: React.FC = ({}) => {
 
 	return (
 		<div>
+			<h1>Ваши видео</h1>
 			{fetchDataSearch.length ? (
 				fetchDataSearch.map((item: IVideo) => <VideoPrev key={item.id} {...item} />)
 			) : (
-				<h1>Ничего не найдено</h1>
+				<p>Ничего не найдено</p>
 			)}
 		</div>
 	)
 }
 
-export default Quest
+export default UserVideo

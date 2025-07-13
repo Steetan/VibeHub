@@ -18,7 +18,7 @@ export const getPreviews = (req: Request, res: Response) => {
 export const getVideoById = (req: Request, res: Response) => {
 	try {
 		pool.query(
-			'SELECT * FROM videos WHERE id = $1',
+			'SELECT videos.*, users.* FROM videos JOIN users ON videos.user_id = users.id WHERE videos.id = $1',
 			[req.query.look],
 			(error: Error, results: QueryResult) => {
 				if (error) throw error
@@ -35,6 +35,7 @@ export const getVideoByUserId = (req: Request, res: Response) => {
 		const token = String(req.query.token) || ''
 
 		jwt.verify(token, `${process.env.JWT_SECRET}`, (err: jwt.VerifyErrors | null, decoded: any) => {
+			console.log(decoded.id)
 			if (err) {
 				res.json({ error: 'Неверный токен' })
 			} else {

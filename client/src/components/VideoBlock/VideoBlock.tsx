@@ -7,7 +7,7 @@ import { customAxios } from '../../utils/axios'
 const VideoBlock: React.FC<any> = ({ video }) => {
 	const [searchParams, setSearchParams] = useSearchParams()
 	const searchTerm = searchParams.get('look')
-	const [fetchCurrentVideo, setFetchCurrentVideo] = React.useState<IVideo | null>(null)
+	const [fetchCurrentVideo, setFetchCurrentVideo] = React.useState<any>(null)
 
 	React.useEffect(() => {
 		const fetchData = async () => {
@@ -25,7 +25,12 @@ const VideoBlock: React.FC<any> = ({ video }) => {
 				controls
 			></video>
 			<h3 className='video-block__title'>{fetchCurrentVideo?.title}</h3>
-			<p className='video-block__title'>{fetchCurrentVideo?.description}</p>
+			<h4 className='video-block__title'>Автор: {fetchCurrentVideo?.name}</h4>
+			<p className='video-block__title'>
+				<b>Описание:</b> <br />
+				<br />
+				{fetchCurrentVideo?.description}
+			</p>
 		</div>
 	)
 }
