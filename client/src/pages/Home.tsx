@@ -5,6 +5,7 @@ import VideoPrev from '../components/VideoPrev/VideoPrev'
 export interface IVideo {
 	id: string
 	link: string
+	description?: string
 	category: string
 	title: string
 	preview: string

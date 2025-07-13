@@ -25,6 +25,7 @@ const VideoBlock: React.FC<any> = ({ video }) => {
 				controls
 			></video>
 			<h3 className='video-block__title'>{fetchCurrentVideo?.title}</h3>
+			<p className='video-block__title'>{fetchCurrentVideo?.description}</p>
 		</div>
 	)
 }

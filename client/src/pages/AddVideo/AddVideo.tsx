@@ -33,10 +33,11 @@ const AddVideo: React.FC = () => {
 			formData.append('imageUrl', imgUrl)
 
 			try {
-				const response = await customAxios('/addvideo', 'post', formData)
-				response && alert('Видео было успешно добавлено')
+				await customAxios('/addvideo', 'post', formData).then(() => {
+					navigate('/')
+				})
 			} catch (error) {
-				console.error('Ошибка при загрузке видео', error)
+				console.error('Ошибка при регистрации', error)
 			}
 		} else {
 			alert('Пожалуйста, загрузите видео')
@@ -55,11 +56,6 @@ const AddVideo: React.FC = () => {
 
 			customAxios(`/prev`, 'post', formData).then((data) => {
 				setImgUrl(data?.url)
-
-				setVideoFile(null)
-				setVideoUrl(null)
-				setImgUrl(null)
-				navigate('/')
 			})
 		} catch (error) {
 			console.warn(error)
@@ -93,16 +89,14 @@ const AddVideo: React.FC = () => {
 						/>
 						{errors.title && <p style={{ color: 'red' }}>{errors.title.message}</p>}
 						<TextField
-							error={!!errors.description}
 							id='outlined-basic'
 							label='Описание'
 							type='text'
 							variant='outlined'
-							{...register('description', { required: 'Укажите описание' })}
+							{...register('description')}
 						/>
-						{errors.description && <p style={{ color: 'red' }}>{errors.description.message}</p>}
 						<TextField
-							error={!!errors.description}
+							error={!!errors.category}
 							id='outlined-basic'
 							label='Категория'
 							type='text'

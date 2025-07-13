@@ -1,23 +1,19 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { TextField } from '@mui/material'
+import { customAxios } from '../utils/axios'
 
 export interface FormData {
 	name: string
-	fname: string
-	oname: string
+	fname?: string
 	email: string
-	phone: number
-	address: string
 	password: string
-	confirmPassword: string
-	url?: string
-	dark_theme?: boolean | null | string
 }
 
 const Registration = ({}) => {
 	const inputFileRef = React.useRef<HTMLInputElement>(null)
+	const navigate = useNavigate()
 
 	const {
 		register,
@@ -25,23 +21,35 @@ const Registration = ({}) => {
 		formState: { errors },
 	} = useForm<FormData>()
 
+	const onSubmit: SubmitHandler<FormData> = async (data) => {
+		const formData = new FormData()
+		formData.append('name', data.name)
+		formData.append('fname', data.fname || '')
+		formData.append('email', data.email)
+		formData.append('password', data.password)
+
+		try {
+			await customAxios('/auth/reg', 'post', {
+				name: data.name,
+				fname: data.fname,
+				email: data.email,
+				password: data.password,
+			}).then((data) => {
+				navigate('/')
+			})
+		} catch (error) {
+			console.error('Ошибка при загрузке видео', error)
+		}
+	}
+
 	return (
 		<div className='form-block-wrapper'>
 			<div className='form-block'>
 				<h3 className='form-block__title'>Регистрация</h3>
-				<form>
+				<form onSubmit={handleSubmit(onSubmit)}>
 					<div className='form-block__inputs'>
 						<TextField
-							error={errors.password && true}
-							id='outlined-basic'
-							label='Фамилия'
-							className='form-block__input'
-							variant='outlined'
-							{...register('fname', { required: 'Укажите фамилию' })}
-						/>
-						{errors.fname && <p style={{ color: 'red' }}>{errors.fname.message}</p>}
-						<TextField
-							error={errors.password && true}
+							error={errors.name && true}
 							id='outlined-basic'
 							className='form-block__input'
 							label='Имя'
@@ -50,16 +58,14 @@ const Registration = ({}) => {
 						/>
 						{errors.name && <p style={{ color: 'red' }}>{errors.name.message}</p>}
 						<TextField
-							error={errors.password && true}
 							id='outlined-basic'
-							label='Отчество'
+							label='Фамилия (не обязательно)'
 							className='form-block__input'
 							variant='outlined'
-							{...register('oname', { required: 'Укажите отчество' })}
+							{...register('fname')}
 						/>
-						{errors.oname && <p style={{ color: 'red' }}>{errors.oname.message}</p>}
 						<TextField
-							error={errors.password && true}
+							error={errors.email && true}
 							id='outlined-basic'
 							label='Email'
 							type='email'
@@ -68,25 +74,6 @@ const Registration = ({}) => {
 							{...register('email', { required: 'Укажите почту' })}
 						/>
 						{errors.email && <p style={{ color: 'red' }}>{errors.email.message}</p>}
-						<TextField
-							error={errors.password && true}
-							id='outlined-basic'
-							label='Номер телефона'
-							type='number'
-							className='form-block__input'
-							variant='outlined'
-							{...register('phone', { required: 'Укажите номер телефона' })}
-						/>
-						{errors.phone && <p style={{ color: 'red' }}>{errors.phone.message}</p>}
-						<TextField
-							error={errors.password && true}
-							id='outlined-basic'
-							label='Адрес'
-							className='form-block__input'
-							variant='outlined'
-							{...register('address', { required: 'Укажите свой адрес' })}
-						/>
-						{errors.address && <p style={{ color: 'red' }}>{errors.address.message}</p>}
 						<TextField
 							error={errors.password && true}
 							id='outlined-basic'

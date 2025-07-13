@@ -1,23 +1,27 @@
 import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormControlLabel, Switch, TextField } from '@mui/material'
+import { customAxios } from '../utils/axios'
+import Cookies from 'js-cookie'
+import { RootState, useAppDispatch } from '../redux/store'
+import { useSelector } from 'react-redux'
+import { setIsAuth } from '../redux/slices/authSlice'
 
 export interface FormData {
-	name: string
-	fname: string
-	oname: string
 	email: string
-	phone: number
-	address: string
 	password: string
-	confirmPassword: string
-	url?: string
-	dark_theme?: boolean | null | string
 }
 
 const Login = ({}) => {
 	const [isChecked, setIsChecked] = React.useState(false)
+	const [cookieValue, setCookieValue] = React.useState('')
+
+	const dispatch = useAppDispatch()
+
+	const { isAuth } = useSelector((state: RootState) => state.authSlice)
+
+	const navigate = useNavigate()
 
 	const {
 		register,
@@ -25,16 +29,34 @@ const Login = ({}) => {
 		formState: { errors },
 	} = useForm<FormData>({ mode: 'onChange' })
 
+	const onSubmit: SubmitHandler<FormData> = async (data) => {
+		const formData = new FormData()
+		formData.append('email', data.email)
+		formData.append('password', data.password)
+
+		try {
+			await customAxios(`/auth/login?email=${data.email}&password=${data.password}`, 'get').then(
+				(data) => {
+					Cookies.set('token', data, { expires: 30 })
+					dispatch(setIsAuth(true))
+					navigate('/')
+				},
+			)
+		} catch (error) {
+			console.error('Ошибка при попытке авторизации', error)
+		}
+	}
+
 	return (
 		<div className='form-block-wrapper'>
 			<div className='form-block'>
 				<h3 className='form-block__title'>Вход</h3>
-				<form>
+				<form onSubmit={handleSubmit(onSubmit)}>
 					<div className='form-block__inputs'>
 						<TextField
 							error={errors.email && true}
 							id='outlined-basic'
-							label='Логин'
+							label='Email'
 							variant='outlined'
 							{...register('email', { required: 'Укажите почту' })}
 						/>
