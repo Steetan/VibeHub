@@ -134,6 +134,9 @@ export const PopupMenu: React.FC<IPopupMenu> = ({ setIsVisiblePopup }) => {
 					</p>
 				)}
 				<ul className='popup-menu-list'>
+					<li className='popup-menu-item' onClick={() => navigate('/addvideo')}>
+						Загрузить видео
+					</li>
 					<li className='popup-menu-item' onClick={() => navigate('/myvideo')}>
 						Мои видео
 					</li>

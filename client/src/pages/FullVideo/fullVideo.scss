@@ -1,4 +1,7 @@
 .fullVideo {
 	display: flex;
 	gap: 40px;
+	@media (max-width: 1650px) {
+		flex-direction: column;
+	}
 }
