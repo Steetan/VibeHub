@@ -128,6 +128,7 @@ const AddVideo: React.FC = () => {
 							id='file-upload-image'
 							ref={inputFileRef}
 							type='file'
+							accept='image/*'
 							style={{ display: 'none' }}
 							onChange={handleFileChange}
 						/>

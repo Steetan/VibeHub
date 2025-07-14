@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
+import Cookies from 'js-cookie'
 
 type TypeAuthState = {
 	data: any
@@ -23,6 +24,7 @@ const authSlice = createSlice({
 	reducers: {
 		logout: (state) => {
 			state.data = {}
+			Cookies.remove('token')
 		},
 		setData: (state, action) => {
 			state.data = action.payload

@@ -7,7 +7,6 @@ import Aside from '../components/Aside/Aside'
 const Layout = () => {
 	const location = useLocation()
 
-	console.log(location.pathname)
 	return (
 		<div className='main'>
 			<Header />

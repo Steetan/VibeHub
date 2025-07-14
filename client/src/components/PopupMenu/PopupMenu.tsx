@@ -1,6 +1,6 @@
 import React from 'react'
 import { RootState, useAppDispatch } from '../../redux/store'
-import { logout, setIsAdmin, setIsAuth, setUserImgUrl } from '../../redux/slices/authSlice'
+import { logout, setData, setIsAdmin, setIsAuth, setUserImgUrl } from '../../redux/slices/authSlice'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { customAxios } from '../../utils/axios'
@@ -24,14 +24,15 @@ export const PopupMenu: React.FC<IPopupMenu> = ({ setIsVisiblePopup }) => {
 
 	React.useEffect(() => {
 		try {
-			// if (isAuth) {
-			// 	const fetchUserImg = async () => {
-			// 		const { data } = await customAxios(`${process.env.REACT_APP_SERVER_URL}/auth/meinfo`)
-			// 		dispatch(setUserImgUrl(data.user_imgurl))
-			// 		setNickname(data.email)
-			// 	}
-			// 	fetchUserImg()
-			// }
+			try {
+				Cookies.get('token') &&
+					customAxios(`/meinfo?token=${Cookies.get('token')}`, 'get').then((data) => {
+						dispatch(setData({ ...data }))
+						dispatch(setIsAuth(true))
+					})
+			} catch (error) {
+				console.error('Ошибка при авторизации', error)
+			}
 
 			const handleClickOutSide = (event: MouseEvent) => {
 				const _event = event as MouseEvent & {
@@ -136,7 +137,7 @@ export const PopupMenu: React.FC<IPopupMenu> = ({ setIsVisiblePopup }) => {
 					<li className='popup-menu-item' onClick={() => navigate('/myvideo')}>
 						Мои видео
 					</li>
-					<li className='popup-menu-item' onClick={() => navigate('/settings')}>
+					<li className='popup-menu-item' onClick={() => navigate('/userset')}>
 						Настройки
 					</li>
 					<li className='popup-menu-item' onClick={onClickItemLogout}>

@@ -29,7 +29,6 @@ export const getVideoByUserId = (req, res) => {
     try {
         const token = String(req.query.token) || '';
         jwt.verify(token, `${process.env.JWT_SECRET}`, (err, decoded) => {
-            console.log(decoded.id);
             if (err) {
                 res.json({ error: 'Неверный токен' });
             }
@@ -38,6 +37,30 @@ export const getVideoByUserId = (req, res) => {
                     if (error)
                         throw error;
                     res.status(200).json(results.rows);
+                });
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+};
+export const deleteUserVideo = (req, res) => {
+    try {
+        const token = String(req.query.token) || '';
+        jwt.verify(token, `${process.env.JWT_SECRET}`, (err, decoded) => {
+            if (err) {
+                res.json({ error: 'Неверный токен' });
+            }
+            else {
+                pool.query('DELETE FROM videos WHERE id = $1', [req.query.id], (error, results) => {
+                    if (error)
+                        throw error;
+                    pool.query('SELECT * FROM videos WHERE user_id = $1', [decoded.id], (error, results) => {
+                        if (error)
+                            throw error;
+                        res.status(200).json(results.rows);
+                    });
                 });
             }
         });

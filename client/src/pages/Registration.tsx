@@ -3,6 +3,10 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { TextField } from '@mui/material'
 import { customAxios } from '../utils/axios'
+import { useSelector } from 'react-redux'
+import { RootState, useAppDispatch } from '../redux/store'
+import { setData, setIsAuth } from '../redux/slices/authSlice'
+import Cookies from 'js-cookie'
 
 export interface FormData {
 	name: string
@@ -13,6 +17,8 @@ export interface FormData {
 
 const Registration = ({}) => {
 	const inputFileRef = React.useRef<HTMLInputElement>(null)
+
+	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
 	const {
@@ -35,6 +41,9 @@ const Registration = ({}) => {
 				email: data.email,
 				password: data.password,
 			}).then((data) => {
+				Cookies.set('token', data.token, { expires: 30 })
+				dispatch(setData({ name: data.name, fname: data.fname, email: data.email }))
+				dispatch(setIsAuth(true))
 				navigate('/')
 			})
 		} catch (error) {

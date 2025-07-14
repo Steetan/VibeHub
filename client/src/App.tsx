@@ -10,6 +10,7 @@ import FullVideo from './pages/FullVideo/FullVideo'
 import Quest from './pages/Quest/Quest'
 import AddVideo from './pages/AddVideo/AddVideo'
 import UserVideo from './pages/UserVideo/UserVideo'
+import UserSettings from './pages/UserSettings/UserSettings'
 
 const App = () => {
 	return (
@@ -21,6 +22,7 @@ const App = () => {
 				<Route path='addvideo' element={<AddVideo />} />
 				<Route path='auth/login' element={<Login />} />
 				<Route path='auth/reg' element={<Registration />} />
+				<Route path='userset' element={<UserSettings />} />
 				<Route path='myvideo' element={<UserVideo />} />
 				<Route path='*' element={<NotFound />} />
 			</Route>

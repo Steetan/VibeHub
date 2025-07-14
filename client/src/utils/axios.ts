@@ -10,8 +10,6 @@ export const customAxios = async (url: string, action: ActionType, body?: {}) =>
 			withCredentials: true,
 		})
 
-		console.log(Cookies.get('token'))
-
 		return response.data
 	} catch (error) {
 		console.error(`Error during ${action} request to ${endpoint}`, error)

@@ -17,23 +17,16 @@ const Header = ({}) => {
 
 	const { isAuth } = useSelector((state: RootState) => state.authSlice)
 
-	React.useEffect(() => {
-		try {
-			Cookies.get('token') &&
-				customAxios(`/meinfo?token=${Cookies.get('token')}`, 'get').then((data) => {
-					dispatch(setData({ ...data }))
-					dispatch(setIsAuth(true))
-				})
-		} catch (error) {
-			console.error('Ошибка при регистрации', error)
-		}
-	}, [])
-
 	return (
 		<header className='header'>
 			<Logo />
 			<Search />
-			<Link to='/auth/login'>{!isAuth && <span>Войти</span>}</Link>
+			{!isAuth && (
+				<Link to='/auth/login'>
+					{' '}
+					<span>Войти</span>
+				</Link>
+			)}
 			<PopupMenu setIsVisiblePopup={setIsVisiblePopup} />
 		</header>
 	)
