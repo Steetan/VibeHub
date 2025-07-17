@@ -5,7 +5,7 @@ import { TextField } from '@mui/material'
 import { customAxios } from '../utils/axios'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '../redux/store'
-import { setData, setIsAuth } from '../redux/slices/authSlice'
+import { setData, setIsAuth, setUserImgUrl } from '../redux/slices/authSlice'
 import Cookies from 'js-cookie'
 
 export interface FormData {
@@ -17,6 +17,7 @@ export interface FormData {
 
 const Registration = ({}) => {
 	const inputFileRef = React.useRef<HTMLInputElement>(null)
+	const { userImgUrl } = useSelector((state: RootState) => state.authSlice)
 
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
@@ -26,6 +27,37 @@ const Registration = ({}) => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormData>()
+
+	const handleFileChange = async (event: any) => {
+		try {
+			const formData = new FormData()
+			formData.append('image', event.target.files[0])
+
+			await customAxios(`/userimage`, 'post', formData).then((data: { url: string }) => {
+				try {
+					dispatch(setUserImgUrl(`${data.url}`))
+					data && alert('Аватарка была успешно изменена')
+				} catch (error) {
+					console.log(error)
+					alert('Не удалось обновить аватарку')
+				}
+			})
+		} catch (error) {
+			console.warn(error)
+		}
+	}
+
+	const deleteImg = async () => {
+		try {
+			customAxios(`/userimage/${userImgUrl}`, 'delete')
+			if (inputFileRef.current) {
+				inputFileRef.current.value = ''
+			}
+			dispatch(setUserImgUrl(''))
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	const onSubmit: SubmitHandler<FormData> = async (data) => {
 		const formData = new FormData()
@@ -40,6 +72,7 @@ const Registration = ({}) => {
 				fname: data.fname,
 				email: data.email,
 				password: data.password,
+				imgUrl: userImgUrl,
 			}).then((data) => {
 				Cookies.set('token', data.token, { expires: 30 })
 				dispatch(setData({ name: data.name, fname: data.fname, email: data.email }))
@@ -93,7 +126,7 @@ const Registration = ({}) => {
 							{...register('password', { required: 'Укажите пароль' })}
 						/>
 						{errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
-						{/* {!userImgUrl && (
+						{!userImgUrl && (
 							<label htmlFor='file-upload' className='custom-file-upload'>
 								Загрузить фото
 							</label>
@@ -115,7 +148,7 @@ const Registration = ({}) => {
 							className='form-block__img-upload'
 							src={`${process.env.REACT_APP_SERVER_URL}/uploads/userIcons/${userImgUrl}`}
 							alt=''
-						/> */}
+						/>
 					</div>
 					<div className='form-block__btns'>
 						<button type='submit' className='button button--footer'>

@@ -8,8 +8,8 @@ export const registerValidator = [
 
 export const updateValidator = [
 	body('name', 'Укажите имя').isLength({ min: 1 }),
-	body('oname', 'Укажите отчество').isLength({ min: 3 }),
 	body('fname', 'Укажите фамилию').isLength({ min: 3 }),
+	body('email', 'Неверный формат почты').isEmail(),
 ]
 
 export const updatePasswordValidator = [

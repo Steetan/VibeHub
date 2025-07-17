@@ -28,6 +28,7 @@ export const PopupMenu: React.FC<IPopupMenu> = ({ setIsVisiblePopup }) => {
 				Cookies.get('token') &&
 					customAxios(`/meinfo?token=${Cookies.get('token')}`, 'get').then((data) => {
 						dispatch(setData({ ...data }))
+						dispatch(setUserImgUrl(data.icon_url))
 						dispatch(setIsAuth(true))
 					})
 			} catch (error) {
@@ -134,14 +135,14 @@ export const PopupMenu: React.FC<IPopupMenu> = ({ setIsVisiblePopup }) => {
 					</p>
 				)}
 				<ul className='popup-menu-list'>
+					<li className='popup-menu-item' onClick={() => navigate('/userset')}>
+						Мой профиль
+					</li>
 					<li className='popup-menu-item' onClick={() => navigate('/addvideo')}>
 						Загрузить видео
 					</li>
 					<li className='popup-menu-item' onClick={() => navigate('/myvideo')}>
 						Мои видео
-					</li>
-					<li className='popup-menu-item' onClick={() => navigate('/userset')}>
-						Настройки
 					</li>
 					<li className='popup-menu-item' onClick={onClickItemLogout}>
 						Выйти

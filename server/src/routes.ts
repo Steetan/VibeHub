@@ -10,8 +10,22 @@ import {
 import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
-import { createUser, deleteUser, getMeInfo, loginUser } from './controllers/UserController.js'
-import { registerValidator } from './middlewares/validations.js'
+import {
+	createUser,
+	deleteUser,
+	deleteUserImg,
+	getMeInfo,
+	loginUser,
+	updatePasswordUser,
+	updateUser,
+	updateUserImg,
+} from './controllers/UserController.js'
+import {
+	registerValidator,
+	updatePasswordValidator,
+	updateValidator,
+} from './middlewares/validations.js'
+import checkAuth from './utils/checkAuth.js'
 
 const router = Router()
 
@@ -61,17 +75,34 @@ router.post('/prev', uploadImage.single('image'), (req, res) => {
 	})
 })
 
-router.post('/userimage', uploadImage.single('image'), (req, res) => {
+router.post('/userimage', uploadUserIcons.single('image'), (req, res) => {
 	res.status(201).json({
 		url: `${req.file?.originalname}`,
 	})
 })
 
+router.patch('/auth/update', checkAuth, updateValidator, updateUser)
+router.patch('/auth/updimg', checkAuth, updateUserImg)
+router.patch('/auth/updpass', checkAuth, updatePasswordValidator, updatePasswordUser)
+
 router.delete('/user', deleteUser)
+router.delete('/upload/user/delete/:filename', deleteUserImg)
 
 router.delete('/prev/:filename', (req, res) => {
 	const fileName = req.params.filename
 	const filePath = path.join('uploads/previews', fileName)
+
+	fs.unlink(filePath, (err) => {
+		if (err) {
+			return res.status(500).json({ error: 'Ошибка при удалении файла' })
+		}
+		res.json({ message: 'Файл успешно удален' })
+	})
+})
+
+router.delete('/userimage/:filename', (req, res) => {
+	const fileName = req.params.filename
+	const filePath = path.join('uploads/userIcons', fileName)
 
 	fs.unlink(filePath, (err) => {
 		if (err) {

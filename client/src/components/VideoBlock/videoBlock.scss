@@ -4,4 +4,13 @@
 		width: 100%;
 		height: auto;
 	}
+	&__author {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		&-title {
+			font-size: 20px;
+			margin: 0;
+		}
+	}
 }

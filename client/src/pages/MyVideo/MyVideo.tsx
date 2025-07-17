@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import { Link } from 'react-router-dom'
 
-const UserVideo: React.FC = ({}) => {
+const MyVideo: React.FC = ({}) => {
 	const [fetchDataSearch, setFetchDataSearch] = React.useState([])
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -63,4 +63,4 @@ const UserVideo: React.FC = ({}) => {
 	)
 }
 
-export default UserVideo
+export default MyVideo
